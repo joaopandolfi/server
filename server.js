@@ -136,6 +136,7 @@ export default function(opt) {
 
 
     server.on('request', (req, res) => {
+        console.log("debig")
         // without a hostname, we won't know who the request is for
         const hostname = req.headers.host;
         if (!hostname) {
