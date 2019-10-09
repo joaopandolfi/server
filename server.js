@@ -28,6 +28,7 @@ export default function(opt) {
     }
 
     const manager = new ClientManager(opt);
+    console.log(opt)
 
     const schema = opt.secure ? 'https' : 'http';
 
