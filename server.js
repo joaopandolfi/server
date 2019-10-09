@@ -158,7 +158,7 @@ export default function(opt) {
         console.log(req.url)
         if(paths.length >= 3 && paths[1] == "t"){
             clientId = paths[2]
-            req.url = req.url.replace(`/t/${clientId}`)
+            req.url = req.url.replace(`/t/${clientId}`,"")
             console.log(req.url);
         }else {
             clientId = GetClientIdFromHostname(hostname);
