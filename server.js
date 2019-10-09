@@ -20,11 +20,7 @@ export default function(opt) {
     const landingPage = opt.landing || 'https://octopuslab.cf';
 
     function GetClientIdFromHostname(hostname) {
-        var a = hostname.split("?")
-        console.log(a)
-        if(a.length == 0)
-            return null
-        return a[1]
+        return myTldjs.getSubdomain(hostname);
     }
 
     const manager = new ClientManager(opt);
@@ -56,6 +52,20 @@ export default function(opt) {
             connected_sockets: stats.connectedSockets,
         };
     });
+
+
+    router.get('/api/tunnel/:id', async (ctx, next) => {
+        const clientId = ctx.params.id;
+        const client = manager.getClient(clientId);
+        if (!client) {
+            ctx.throw(404);
+            return;
+        }
+
+        client.handleRequest(ctx.request, next);
+    });
+
+
     app.use(router.routes());
     app.use(router.allowedMethods());
 
@@ -136,7 +146,6 @@ export default function(opt) {
 
 
     server.on('request', (req, res) => {
-        console.log("debig")
         // without a hostname, we won't know who the request is for
         const hostname = req.headers.host;
         if (!hostname) {
@@ -144,22 +153,25 @@ export default function(opt) {
             res.end('Host header is required');
             return;
         }
-        console.log("debig 2")
-        console.log(req.headers)
-        const clientId = GetClientIdFromHostname(hostname);
-        console.log(clientId)
+        var paths = req.url.split("/")
+        var clientId = ""
+        
+        if(paths.length == 3 && paths[1] == "t"){
+            clientId = paths[2]
+            req.url = ""
+        }else {
+            clientId = GetClientIdFromHostname(hostname);
+        }
         if (!clientId) {
             appCallback(req, res);
             return;
         }
-        console.log("debig 3")
         const client = manager.getClient(clientId);
         if (!client) {
             res.statusCode = 404;
             res.end('404');
             return;
         }
-        console.log("debig 4")
         client.handleRequest(req, res);
     });
 
