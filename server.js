@@ -5,6 +5,8 @@ import Debug from 'debug';
 import http from 'http';
 import { hri } from 'human-readable-ids';
 import Router from 'koa-router';
+import https from 'https';
+import fs from 'fs';
 
 import ClientManager from './lib/ClientManager';
 
@@ -18,7 +20,11 @@ export default function(opt) {
     const landingPage = opt.landing || 'https://localtunnel.github.io/www/';
 
     function GetClientIdFromHostname(hostname) {
-        return myTldjs.getSubdomain(hostname);
+        var a = hostname.split(".")
+        if(a.length == 1)
+            return null
+        return a[0]
+        //return myTldjs.getSubdomain(hostname);
     }
 
     const manager = new ClientManager(opt);
@@ -49,7 +55,6 @@ export default function(opt) {
             connected_sockets: stats.connectedSockets,
         };
     });
-
     app.use(router.routes());
     app.use(router.allowedMethods());
 
@@ -113,9 +118,21 @@ export default function(opt) {
         return;
     });
 
-    const server = http.createServer();
+    var server ={};
+    
+    if(!opt.secure){
+        server = http.createServer();
+    }else{
+        var privateKey  = fs.readFileSync("/home/ubuntu/ssl/server.key", 'utf8');                                                                    
+        var certificate = fs.readFileSync("/home/ubuntu/ssl/server.crt", 'utf8');                                                                      
+        var credentials = {key: privateKey, cert: certificate};
 
+        server = https.createServer(credentials);
+    }
+    
     const appCallback = app.callback();
+
+
 
     server.on('request', (req, res) => {
         // without a hostname, we won't know who the request is for
@@ -125,20 +142,19 @@ export default function(opt) {
             res.end('Host header is required');
             return;
         }
-
         const clientId = GetClientIdFromHostname(hostname);
         if (!clientId) {
             appCallback(req, res);
             return;
         }
-
+        
         const client = manager.getClient(clientId);
         if (!client) {
             res.statusCode = 404;
             res.end('404');
             return;
         }
-
+        
         client.handleRequest(req, res);
     });
 
