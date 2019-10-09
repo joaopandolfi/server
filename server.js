@@ -143,19 +143,20 @@ export default function(opt) {
             res.end('Host header is required');
             return;
         }
+        console.log("debig 2")
         const clientId = GetClientIdFromHostname(hostname);
         if (!clientId) {
             appCallback(req, res);
             return;
         }
-        
+        console.log("debig 3")
         const client = manager.getClient(clientId);
         if (!client) {
             res.statusCode = 404;
             res.end('404');
             return;
         }
-        
+        console.log("debig 4")
         client.handleRequest(req, res);
     });
 
