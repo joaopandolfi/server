@@ -20,12 +20,10 @@ export default function(opt) {
     const landingPage = opt.landing || 'https://octopuslab.cf';
 
     function GetClientIdFromHostname(hostname) {
-        var a = hostname.split(".")
-        var d = opt.domain.split(".")
-        console.log(validHosts)
-        console.log(hostname)
-        console.log(myTldjs.getSubdomain(hostname))
-        //return myTldjs.getSubdomain(hostname);
+        var a = hostname.split("?")
+        if(a.length < 1)
+            return null
+        return a[1]
     }
 
     const manager = new ClientManager(opt);
