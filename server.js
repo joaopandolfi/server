@@ -17,13 +17,12 @@ export default function(opt) {
 
     const validHosts = (opt.domain) ? [opt.domain] : undefined;
     const myTldjs = tldjs.fromUserSettings({ validHosts });
-    const landingPage = opt.landing || 'https://localtunnel.github.io/www/';
+    const landingPage = opt.landing || 'https://octopuslab.cf';
 
     function GetClientIdFromHostname(hostname) {
         var a = hostname.split(".")
-        if(a.length == 1)
-            return null
-        return a[0]
+        var d = opt.domain.split(".")
+        console.log(myTldjs.getSubdomain)
         //return myTldjs.getSubdomain(hostname);
     }
 
