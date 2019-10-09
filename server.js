@@ -23,6 +23,7 @@ export default function(opt) {
         var a = hostname.split(".")
         var d = opt.domain.split(".")
         console.log(validHosts)
+        console.log(hostname)
         console.log(myTldjs.getSubdomain(hostname))
         //return myTldjs.getSubdomain(hostname);
     }
