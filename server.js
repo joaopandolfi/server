@@ -155,7 +155,7 @@ export default function(opt) {
         }
         var paths = req.url.split("/")
         var clientId = ""
-        
+        console.log(req.url)
         if(paths.length == 3 && paths[1] == "t"){
             clientId = paths[2]
             req.url = ""
