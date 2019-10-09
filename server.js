@@ -85,7 +85,7 @@ export default function(opt) {
             debug('making new client with id %s', reqId);
             const info = await manager.newClient(reqId);
 
-            const url = schema + '://' + info.id + '.' + ctx.request.host;
+            const url = schema + '://'+ctx.request.host+'/t/' + info.id;
             info.url = url;
             ctx.body = info;
             return;
@@ -123,7 +123,7 @@ export default function(opt) {
         debug('making new client with id %s', reqId);
         const info = await manager.newClient(reqId);
 
-        const url = schema + '://' + info.id + '.' + ctx.request.host;
+        const url = schema + '://'+ctx.request.host+'/t/' + info.id;
         info.url = url;
         ctx.body = info;
         return;
