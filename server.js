@@ -145,6 +145,7 @@ export default function(opt) {
             return;
         }
         console.log("debig 2")
+        console.log(req.headers)
         const clientId = GetClientIdFromHostname(hostname);
         console.log(clientId)
         if (!clientId) {
