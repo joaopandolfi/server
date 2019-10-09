@@ -21,7 +21,8 @@ export default function(opt) {
 
     function GetClientIdFromHostname(hostname) {
         var a = hostname.split("?")
-        if(a.length < 1)
+        console.log(a)
+        if(a.length == 0)
             return null
         return a[1]
     }
@@ -145,6 +146,7 @@ export default function(opt) {
         }
         console.log("debig 2")
         const clientId = GetClientIdFromHostname(hostname);
+        console.log(clientId)
         if (!clientId) {
             appCallback(req, res);
             return;
